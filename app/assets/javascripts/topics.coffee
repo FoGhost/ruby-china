@@ -22,7 +22,7 @@ window.Topics =
       height: 145
       content: '<iframe src="/photos/tiny_new" frameborder="0" style="width:330px; height:145px;"></iframe>',
       close_on_body_click : false
-    
+
     $("#add_image").jDialog(opts)
     return false
 
@@ -119,9 +119,9 @@ $(document).ready ->
 
   $("a.small_reply").live 'click', () ->
     Topics.reply($(this).data("floor"), $(this).data("login"))
-  
+
   Topics.hookPreview($(".editor_toolbar"), $(".topic_editor"))
-  
+
   $("body").bind "keydown", "m", (el) ->
     $('#markdown_help_tip_modal').modal
       keyboard : true
@@ -131,13 +131,15 @@ $(document).ready ->
   # @ Reply
   logins = []
   login_exists = []
-  author_val =
-    login : $("#topic_show .leader .name a").text(), 
-    name : $("#topic_show .leader .name a").data('name')
-  logins.push(author_val)
-  login_exists.push(author_val.login)
+  if $("#topic_show .leader .name a").length
+    author_val =
+      login : $("#topic_show .leader .name a").text(),
+      name : $("#topic_show .leader .name a").data('name')
+    logins.push(author_val)
+    login_exists.push(author_val.login)
+
   $('#replies span.name a').each (idx) ->
-    val = 
+    val =
       login : $(this).text()
       name : $(this).data('name')
     if $.inArray(val.login,login_exists) < 0
