@@ -129,20 +129,5 @@ $(document).ready ->
       show : true
 
   # @ Reply
-  logins = []
-  login_exists = []
-  if $("#topic_show .leader .name a").length
-    author_val =
-      login : $("#topic_show .leader .name a").text(),
-      name : $("#topic_show .leader .name a").data('name')
-    logins.push(author_val)
-    login_exists.push(author_val.login)
-
-  $('#replies span.name a').each (idx) ->
-    val =
-      login : $(this).text()
-      name : $(this).data('name')
-    if $.inArray(val.login,login_exists) < 0
-      login_exists.push(val.login)
-      logins.push(val)
-  App.at_replyable("textarea", logins)
+  logins = App.selectAtLoginData(".at-login a")
+  App.atLogins("textarea", logins)

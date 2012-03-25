@@ -1,3 +1,5 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+# Page ready
+$(document).ready ->
+  # CommentAble @ 回复功能
+  logins = App.selectAtLoginData(".at-login a")
+  App.atLogins(".cell_comments_new textarea", logins)

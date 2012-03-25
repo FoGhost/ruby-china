@@ -20,7 +20,7 @@
 window.App =
   loading : () ->
     console.log "loading..."
-    
+
   # 警告信息显示, to 显示在那个dom前(可以用 css selector)
   alert : (msg,to) ->
     $(to).before("<div data-alert class='alert-message'><a class='close' href='#'>X</a>#{msg}</div>")
@@ -28,7 +28,7 @@ window.App =
   # 成功信息显示, to 显示在那个dom前(可以用 css selector)
   notice : (msg,to) ->
     $(to).before("<div data-alert class='alert-message success'><a class='close' href='#'>X</a>#{msg}</div>")
-      
+
   openUrl : (url) ->
     window.open(url)
 
@@ -65,12 +65,25 @@ window.App =
     false
 
   # 绑定 @ 回复功能
-  at_replyable : (el, logins) ->
+  atLogins : (el, logins) ->
     $(el).atWho "@"
       debug : false
       data : logins
       tpl : "<li data-keyname='${login}'>${login} <small>${name}</small></li>"
-      
+
+  selectAtLoginData : (el) ->
+    login_names = []
+    logins = []
+
+    $(el).each (idx) ->
+      val =
+        login : $(this).text()
+        name : $(this).data('name')
+      if $.inArray(val.login, login_names) < 0
+        login_names.push(val.login)
+        logins.push(val)
+    logins
+
   initForDesktopView : () ->
     return if typeof(app_mobile) != "undefined"
     $("a[rel=twipsy]").twipsy({ live: true })
@@ -114,30 +127,17 @@ window.App =
         return 'above' if isWithinBounds(elementAbove)
         return 'below'
 
-    # CommentAble @ 回复功能
-    commenters = []
-    commenter_exists = []
-    $(".cell_comments .comment .info .name a").each (idx) ->
-      val = 
-        login : $(this).text()
-        name : $(this).data('name')
-      if $.inArray(val.login,commenter_exists) < 0
-         commenters.push(val) 
-         commenter_exists.push(val.login)
-    App.at_replyable(".cell_comments_new textarea", commenters)
-      
 $(document).ready ->
   App.initForDesktopView()
-  
+
   $("abbr.timeago").timeago()
-  $(".alert-message").alert()  
+  $(".alert-message").alert()
 
   # 绑定评论框 Ctrl+Enter 提交事件
   $(".cell_comments_new textarea").bind "keydown","ctrl+return",(el) ->
     if $(el.target).val().trim().length > 0
       $(el.target).parent().parent().submit()
     return false
-  
+
   # Choose 样式
   $("select").chosen()
-  
